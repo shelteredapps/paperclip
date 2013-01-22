@@ -145,6 +145,12 @@ module Paperclip
           if @options[:fog_host]
             expiring_url.gsub!(/#{host_name_for_directory}/, dynamic_fog_host_for_style(style))
           end
+        elsif directory.connection.respond_to?(:get_object_https_url)
+          expiring_url = directory.connection.get_object_https_url(directory.key, path(style), time)
+
+          if @options[:fog_host]
+            expiring_url.gsub!(/#{host_name_for_directory}/, dynamic_fog_host_for_style(style))
+          end
         else
           expiring_url = public_url
         end
